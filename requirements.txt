@@ -3,4 +3,4 @@ pandas
 matplotlib
 streamlit-embedcode
 Pillow
-opencv-python
+opencv-python-headless
