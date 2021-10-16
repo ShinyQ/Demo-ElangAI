@@ -12,19 +12,15 @@ st.set_page_config(
 )
 
 
-def draw_bounding_box(img, boxes, pred_cls, rect_th=3):
+def draw_bounding_box(img, boxes, rect_th=3):
     img = np.asarray(img)
-    class_color_dict = {}
-
-    for cat in pred_cls:
-        class_color_dict[cat] = [255]
 
     for i in range(len(boxes)):
         cv2.rectangle(
             img,
             (int(boxes[i][0]['x1']), int(boxes[i][0]['y1'])),
             (int(boxes[i][1]['x2']), int(boxes[i][1]['y2'])),
-            color=class_color_dict[pred_cls[i]], thickness=rect_th
+            color=(255, 0, 0), thickness=rect_th
         )
 
     plt.figure(figsize=(20, 30))
@@ -37,7 +33,6 @@ def draw_bounding_box(img, boxes, pred_cls, rect_th=3):
 def predict_image(image):
     response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
     dict_response = response.json()
-
     return dict_response
 
 
@@ -47,7 +42,7 @@ def main():
     col1, col2, col3 = st.columns([3, 0.5, 3])
 
     with col1:
-        image = st.file_uploader("Pilih Gambar", type=['png', 'jpeg', 'jpg'])
+        image = st.file_uploader("Pilih Gambar")
 
         if image is not None:
             image_1 = Image.open(image)
@@ -58,7 +53,7 @@ def main():
             data_dict = predict_image(image)
             with col3:
                 st.write("## **People Detection Result**")
-                draw_bounding_box(Image.open(image), data_dict['data']['boxes'], data_dict['data']['classes'])
+                draw_bounding_box(Image.open(image), data_dict['data']['boxes'])
                 total = len(data_dict['data']['classes'])
                 st.write(f'Jumlah Orang Terdeteksi : {total}')
 
@@ -66,8 +61,8 @@ def main():
                 st.write("")
                 st.write("## **JSON Fetch Endpoint**")
                 st.code("""
-            response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
-            dict_response = response.json()
+response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
+dict_response = response.json()
             """, language='python')
                 st.json(data_dict)
         except():
