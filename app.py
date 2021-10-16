@@ -56,9 +56,6 @@ def main():
     if image is not None:
         try:
             data_dict = predict_image(image)
-        except():
-            st.write("Error Access The Server API")
-        finally:
             with col3:
                 st.write("## **People Detection Result**")
                 draw_bounding_box(Image.open(image), data_dict['data']['boxes'], data_dict['data']['classes'])
@@ -69,10 +66,12 @@ def main():
                 st.write("")
                 st.write("## **JSON Fetch Endpoint**")
                 st.code("""
-response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
-dict_response = response.json()
-                """, language='python')
+            response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
+            dict_response = response.json()
+            """, language='python')
                 st.json(data_dict)
+        except():
+            st.write("Error Access The Server API")
 
 
 main()
