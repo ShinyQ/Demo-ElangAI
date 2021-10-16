@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 
-def draw_bounding_box(img, boxes, pred_cls, rect_th=2):
+def draw_bounding_box(img, boxes, pred_cls, rect_th=3):
     img = np.asarray(img)
     class_color_dict = {}
 
@@ -62,10 +62,16 @@ def main():
             with col3:
                 st.write("## **Object Detection Result**")
                 draw_bounding_box(Image.open(image), data_dict['data']['boxes'], data_dict['data']['classes'])
+                total = len(data_dict['data']['classes'])
+                st.write(f'Jumlah Orang Terdeteksi : {total}')
 
-            if data_dict is not None:
+            if image is not None:
                 st.write("")
                 st.write("## **JSON Fetch Endpoint**")
+                st.code("""
+response = requests.post("https://elang.kurniadiwijaya.my.id/predict_image", files={'file': image.getbuffer()})
+dict_response = response.json()
+                """, language='python')
                 st.json(data_dict)
 
 
