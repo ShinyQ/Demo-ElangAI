@@ -42,7 +42,7 @@ def predict_image(image):
 
 
 def main():
-    st.title('Object Detection Demo')
+    st.title('People Detection Demo')
     st.write("")
     col1, col2, col3 = st.columns([3, 0.5, 3])
 
@@ -60,7 +60,7 @@ def main():
             st.write("Error Access The Server API")
         finally:
             with col3:
-                st.write("## **Object Detection Result**")
+                st.write("## **People Detection Result**")
                 draw_bounding_box(Image.open(image), data_dict['data']['boxes'], data_dict['data']['classes'])
                 total = len(data_dict['data']['classes'])
                 st.write(f'Jumlah Orang Terdeteksi : {total}')
